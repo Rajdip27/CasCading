@@ -6,4 +6,5 @@ public class Country
     public string Name { get; set; } = String.Empty;
 
     public ICollection<State> States=new HashSet<State>();
+    public ICollection<Employee> Employees=new HashSet<Employee>();
 }

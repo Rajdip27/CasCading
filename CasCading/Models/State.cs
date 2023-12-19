@@ -8,4 +8,5 @@ public class State
     public Country Country { get; set; } = new Country();
 
     public ICollection<City> Cities = new HashSet<City>();
+    public ICollection<Employee> Employees = new HashSet<Employee>();
 }
