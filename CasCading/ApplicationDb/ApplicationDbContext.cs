@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using CasCading.ViewModel;
 
 namespace CasCading.ApplicationDb;
 
@@ -8,4 +9,6 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
     }
+
+public DbSet<CasCading.ViewModel.VmCountry> VmCountry { get; set; } = default!;
 }
