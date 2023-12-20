@@ -11,4 +11,6 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     }
 
 public DbSet<CasCading.ViewModel.VmCountry> VmCountry { get; set; } = default!;
+
+public DbSet<CasCading.ViewModel.VmEmployee> VmEmployee { get; set; } = default!;
 }

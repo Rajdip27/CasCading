@@ -3,7 +3,7 @@
 public class Employee
 {
     public int Id { get; set; }
-    public string Name { get; set; } = string.Empty;
+    public string Name { get; set; } = default!;
     public string Address { get; set; }=string.Empty;
     public string Gender { get; set; } = string.Empty;
     public DateTime Joiningdate { get; set; }
