@@ -8,6 +8,7 @@ public class MappingProfile:Profile
 {
     public MappingProfile()
     {
+        CreateMap<Employee, VmEmployee>().ReverseMap();
         CreateMap<VmState, State>().ReverseMap().ForMember(x => x.CountryName,
             x => x.MapFrom(x => x.Country != null ? x.Country.Name : ""));
         CreateMap<VmCity, City>().ReverseMap()

@@ -8,4 +8,5 @@ namespace CasCading.Repository;
 public interface IStateRepository:IRepositoryService<State,VmState>
 { 
    IEnumerable<SelectListItem>  Dropdown();
+   public IEnumerable<State> GetStatesByCountry(int id);
 }
