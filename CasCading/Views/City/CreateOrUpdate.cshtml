@@ -1,0 +1,27 @@
+﻿@model CasCading.ViewModel.VmCity;
+@{
+
+}
+
+<div class="container">
+    <form asp-action="CreateOrUpdate" asp-controller="City" method="post">
+        <div class=" col-md-6">
+            <label class=" col-form-label">State Name<span class=" text-danger">*</span></label>
+            <select class="form-control" asp-for="StateId" asp-items="@ViewBag.StateId">
+                <option value="">--Select State Name--</option>
+            </select>
+            <span asp-validation-for="StateId" class=" text-danger"></span>
+        </div>
+        <div class=" col-md-6">
+            <label class=" col-form-label">City Name <span class=" text-danger">*</span></label>
+            <input asp-for="Name" type="text" class="form-control" />
+            <span asp-validation-for="Name" class=" text-danger"></span>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <input type="submit" value="Save" class="btn btn-sm btn-success" />
+            </div>
+        </div>
+    </form>
+</div>

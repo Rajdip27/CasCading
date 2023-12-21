@@ -4,38 +4,37 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CasCading.Controllers;
 
-public class StateController(IStateRepository stateRepository, ICountryRepository countryRepository) : Controller
+public class CityController(IStateRepository stateRepository, ICityRepository cityRepository)
+    : Controller
 {
-    
     public async Task<IActionResult> Index()
-    
     {
-        var data = await stateRepository.GetAllAsync(x=>x.Country);
+        var data = await cityRepository.GetAllAsync(x => x.State);
         return View(data);
     }
     [HttpGet]
     public async Task<IActionResult> CreateOrUpdate(int id, CancellationToken cancellationToken)
     {
-        ViewData["CountryId"] =  countryRepository.Dropdown();
+        ViewData["StateId"] = stateRepository.Dropdown();
         if (id==0)
         {
-            return View(new VmState());
+            return View(new VmCity());
         }
         else
         {
-            var data = await stateRepository.GetByIdAsync(id, cancellationToken);
+            var data = await cityRepository.GetByIdAsync(id, cancellationToken);
             return View(data);
         }
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateOrUpdate(int id, VmState state, CancellationToken cancellationToken)
+    public async Task<IActionResult> CreateOrUpdate(int id, VmCity city, CancellationToken cancellationToken)
     {
         if (id==0)
         {
             if (ModelState.IsValid)
             {
-                await stateRepository.InsertAsync(state, cancellationToken);
+                await cityRepository.InsertAsync(city, cancellationToken);
                 return RedirectToAction(nameof(Index));
             }
         }
@@ -43,20 +42,22 @@ public class StateController(IStateRepository stateRepository, ICountryRepositor
         {
             if (ModelState.IsValid)
             {
-                await stateRepository.UpdateAsync(id,state, cancellationToken);
+                await cityRepository.UpdateAsync(id,city, cancellationToken);
                 return RedirectToAction(nameof(Index));
             }
         }
-        return View(state);
+
+        return View(city);
     }
 
-    public async Task<IActionResult> Delete(int id ,CancellationToken cancellationToken)
+    public async Task<IActionResult> Delete(int id)
     {
-        if (id!=0)
+        if (id != 0)
         {
-            await stateRepository.DeleteAsync(id, cancellationToken);
+            await cityRepository.DeleteAsync(id, CancellationToken.None);
             return RedirectToAction(nameof(Index));
         }
         return RedirectToAction(nameof(Index));
     }
+
 }
