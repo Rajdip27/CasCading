@@ -9,10 +9,10 @@ public class Employee
     public DateTime Joiningdate { get; set; }
     public string Picture { get; set; }= string.Empty;
     public int CountryId { get; set; }
-    public Country Country { get; set; }=new();
+    public Country Country { get; set; }
     public int StateId { get; set; }
-    public State State { get; set; } = new();
+    public State State { get; set; } 
     public int CityId { get; set; }
-    public City City { get; set; } = new();
+    public City City { get; set; }
    
 }

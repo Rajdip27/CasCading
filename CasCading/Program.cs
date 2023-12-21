@@ -9,6 +9,7 @@ builder.Services.AddAutoMapper(typeof(ICore).Assembly);
 builder.Services.AddControllersWithViews();
 builder.Services.AddTransient<IEmployeeRepository, EmployeeRepository>();
 builder.Services.AddTransient<ICountryRepository, CountryRepository>();
+builder.Services.AddTransient<IStateRepository,StateRepository>();
 builder.Services.AddDbContext<ApplicationDbContext>(x =>
     x.UseSqlServer(builder.Configuration.GetConnectionString("Conn")));
 

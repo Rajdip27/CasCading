@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Linq.Expressions;
+using AutoMapper;
 using CasCading.ApplicationDb;
 using Microsoft.EntityFrameworkCore;
 
@@ -24,6 +25,17 @@ namespace CasCading.Service
             var data = _mapper.Map<IEnumerable<IModel>>(entities);
             return data;
         }
+
+        public async Task<List<IModel>> GetAllAsync(params Expression<Func<TEntity, object>>[] includes)
+        {
+            var query = includes.Aggregate(_dbContext.Set<TEntity>().AsQueryable(),
+                (current, include) => current.Include(include));
+
+            var entities = await query.ToListAsync().ConfigureAwait(false);
+
+            return _mapper.Map<List<IModel>>(entities);
+        }
+
         public async Task<IModel> InsertAsync(IModel model, CancellationToken cancellationToken)
         {
             var entity = _mapper.Map<IModel, TEntity>(model);
