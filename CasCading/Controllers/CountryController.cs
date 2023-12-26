@@ -1,10 +1,13 @@
 ﻿using CasCading.Repository;
 using CasCading.ViewModel;
 using Microsoft.AspNetCore.Mvc;
+using System.Net.Mime;
+using System.Text;
+using AspNetCore.Reporting;
 
 namespace CasCading.Controllers;
 
-public class CountryController(ICountryRepository countryRepository) : Controller
+public class CountryController(ICountryRepository countryRepository , IWebHostEnvironment webHostEnvironment) : Controller
 {
     public async Task<IActionResult> Index(CancellationToken cancellationToken)=> View(await countryRepository.GetAllAsync(cancellationToken));
     [HttpGet]
@@ -41,5 +44,29 @@ public class CountryController(ICountryRepository countryRepository) : Controlle
         {
             return RedirectToAction(nameof(Index));
         }
+    }
+
+
+    [HttpGet]
+    public async Task<ActionResult> Print(CancellationToken cancellationToken)
+    {
+        var data = await countryRepository.GetAllAsync(cancellationToken);
+        string reportName = "TestReport.pdf";
+        string reportPath = Path.Combine(webHostEnvironment.ContentRootPath, "Report", "CountryReport.rdlc");
+        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+        Encoding.GetEncoding("utf-8");
+        LocalReport report = new LocalReport(reportPath);
+        report.AddDataSource("CountryDataSet", data.ToList());
+
+        Dictionary<string, string> parameters = new Dictionary<string, string>();
+        var result = report.Execute(RenderType.Pdf, 2, parameters);
+        var content = result.MainStream.ToArray();
+        var contentDisposition = new ContentDisposition
+        {
+            FileName = reportName,
+            Inline = true,  
+        };
+        Response.Headers.Add("Content-Disposition", contentDisposition.ToString());
+        return File(content, MediaTypeNames.Application.Pdf);
     }
 }
