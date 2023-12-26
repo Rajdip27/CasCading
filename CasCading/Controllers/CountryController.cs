@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using System.Net.Mime;
 using System.Text;
 using AspNetCore.Reporting;
+using CasCading.Models;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace CasCading.Controllers;
 
@@ -69,4 +71,30 @@ public class CountryController(ICountryRepository countryRepository , IWebHostEn
         Response.Headers.Add("Content-Disposition", contentDisposition.ToString());
         return File(content, MediaTypeNames.Application.Pdf);
     }
+    [HttpGet]
+    public async Task<ActionResult> Print2(int id, CancellationToken cancellationToken)
+    {
+        var singleData = await countryRepository.GetByIdAsync(id, cancellationToken);
+        var data = new List<VmCountry> { singleData }; 
+
+        string reportName = "TestReport.pdf";
+        string reportPath = Path.Combine(webHostEnvironment.ContentRootPath, "Report", "CountryReport.rdlc");
+        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+        Encoding.GetEncoding("utf-8");
+        LocalReport report = new LocalReport(reportPath);
+        report.AddDataSource("CountryDataSet", data);
+
+        Dictionary<string, string> parameters = new Dictionary<string, string>();
+        var result = report.Execute(RenderType.Pdf, 2, parameters);
+        var content = result.MainStream.ToArray();
+        var contentDisposition = new ContentDisposition
+        {
+            FileName = reportName,
+            Inline = true,
+        };
+        Response.Headers.Add("Content-Disposition", contentDisposition.ToString());
+        return File(content, MediaTypeNames.Application.Pdf);
+    }
+
+
 }
